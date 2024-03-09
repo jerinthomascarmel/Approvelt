@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "553236918671",
+    "project_id": "approvelt-462bf",
+    "storage_bucket": "approvelt-462bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553236918671:android:d4a936b70c5b757a569bfa",
+        "android_client_info": {
+          "package_name": "com.example.approvelt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqKxvy_WsAPUFq1ZmHjigN2vi7ZwbAzwY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
