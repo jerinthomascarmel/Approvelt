@@ -1,10 +1,9 @@
 import 'package:approvelt/common/error_screen.dart';
 import 'package:approvelt/common/loader_screen.dart';
 import 'package:approvelt/features/auth/providers/firebase_init_provider.dart';
+import 'package:approvelt/features/auth/screens/auth_checker_screen.dart';
 import 'package:approvelt/features/auth/screens/login_screen.dart';
-import 'package:approvelt/firebase_options.dart';
 import 'package:approvelt/router.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,8 +28,7 @@ class MyApp extends ConsumerWidget {
       onGenerateRoute: (settings) => generateRoute(settings),
       home: initialize.when(
           data: (data) {
-            // return const AuthChecker();
-            return const LoginScreen();
+            return const AuthChecker();
           },
           error: ((error, stackTrace) => ErrorScreen(error: error.toString())),
           loading: () => const LoadingScreen()),

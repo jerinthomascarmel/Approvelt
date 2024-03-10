@@ -14,6 +14,8 @@ class AuthChecker extends ConsumerWidget {
     final _authState = ref.watch(authStateProvider);
     return _authState.when(
         data: (data) {
+          if (data == null) print('null');
+          if (data != null) print(data);
           if (data != null) return const HomeScreen();
           return const LoginScreen();
         },
