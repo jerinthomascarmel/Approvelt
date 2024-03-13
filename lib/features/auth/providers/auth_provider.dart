@@ -1,3 +1,5 @@
+import 'package:approvelt/features/auth/screens/auth_checker_screen.dart';
+import 'package:approvelt/features/auth/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,11 +23,8 @@ class Authentication extends StateNotifier<bool> {
   Future<void> signInWithEmailAndPassword(
       String email, String password, BuildContext context) async {
     state = true;
-    try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      state = false;
-    } on FirebaseAuthException catch (e) {
-      state = false;
+    final credential = await AuthService.loginUser(email, password);
+    credential.fold((e) async {
       await showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -40,40 +39,39 @@ class Authentication extends StateNotifier<bool> {
           ],
         ),
       );
-    }
+      state = false;
+    }, (r) {
+      state = false;
+      Navigator.pushNamedAndRemoveUntil(
+          context, AuthChecker.routeName, (route) => false);
+    });
   }
 
   // SignUp the user using Email and Password
-  Future<void> signUpWithEmailAndPassword(
-      String email, String password, BuildContext context) async {
+  Future<void> signUpWithEmailAndPassword(String email, String password,
+      String name, String type, BuildContext context) async {
     state = true;
-    try {
-      _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      state = false;
-    } on FirebaseAuthException catch (e) {
-      state = false;
+    final usercred =
+        await AuthService.registerUser(email, password, name, type);
+    usercred.fold((e) async {
       await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-                  title: Text('Error Occured'),
+                  title: const Text('Error Occured'),
                   content: Text(e.toString()),
                   actions: [
                     TextButton(
                         onPressed: () {
                           Navigator.of(ctx).pop();
                         },
-                        child: Text("OK"))
+                        child: const Text("OK"))
                   ]));
-    } catch (e) {
-      if (e == 'email-already-in-use') {
-        print('Email already in use.');
-      } else {
-        print('Error: $e');
-      }
-    }
+      state = false;
+    }, (r) {
+      Navigator.pushNamedAndRemoveUntil(
+          context, AuthChecker.routeName, (route) => false);
+      state = false;
+    });
   }
 
   //  SignOut the current user

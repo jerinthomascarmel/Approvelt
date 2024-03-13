@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:approvelt/common/loader_screen.dart';
+import 'package:approvelt/constants/global_variable.dart';
 import 'package:approvelt/constants/utils.dart';
 import 'package:approvelt/features/auth/providers/auth_provider.dart';
 import 'package:approvelt/features/auth/screens/register_screen.dart';
@@ -46,15 +47,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             body: Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Colors.black,
-                  Colors.orange,
-                ],
-              )),
+              decoration: BoxDecoration(gradient: orangeGradient),
               alignment: Alignment.center,
               child: Container(
                 height: 400,
@@ -163,8 +156,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.pushNamed(
-                                          context, RegisterScreen.routeName);
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          RegisterScreen.routeName,
+                                          (route) => false);
                                     },
                                     child: const Text(
                                       'Register',

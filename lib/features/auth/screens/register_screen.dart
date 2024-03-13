@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:approvelt/common/loader_screen.dart';
+import 'package:approvelt/constants/global_variable.dart';
 import 'package:approvelt/constants/utils.dart';
 import 'package:approvelt/features/auth/providers/auth_provider.dart';
 import 'package:approvelt/features/auth/screens/login_screen.dart';
@@ -33,10 +34,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     _usernameController.dispose();
   }
 
-  void registerUser(String email, String password, BuildContext context) async {
-    await ref
-        .read(authenticationProvider.notifier)
-        .signUpWithEmailAndPassword(email, password, context);
+  void registerUser(String email, String password, String name, Type type,
+      BuildContext context) async {
+    String typeToString = (type == Type.admin) ? "admin" : "user";
+    await ref.read(authenticationProvider.notifier).signUpWithEmailAndPassword(
+        email, password, name, typeToString, context);
   }
 
   @override
@@ -48,15 +50,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             body: Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Colors.black,
-                  Colors.orange,
-                ],
-              )),
+              decoration: BoxDecoration(gradient: orangeGradient),
               alignment: Alignment.center,
               child: Container(
                 height: 400,
@@ -156,8 +150,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 onTap: () {
                                   if (_registerFormKey.currentState!
                                       .validate()) {
-                                    registerUser(_emailController.text,
-                                        _passwordController.text, context);
+                                    registerUser(
+                                        _emailController.text,
+                                        _passwordController.text,
+                                        _usernameController.text,
+                                        _type,
+                                        context);
                                   }
                                 },
                               ),
