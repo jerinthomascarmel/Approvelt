@@ -1,10 +1,9 @@
-import 'package:approvelt/common/error_screen.dart';
-import 'package:approvelt/common/loader_screen.dart';
 import 'package:approvelt/common/request_item.dart';
 import 'package:approvelt/constants/global_variable.dart';
 import 'package:approvelt/features/auth/providers/auth_provider.dart';
 import 'package:approvelt/features/home/provider/request_item_provider.dart';
 import 'package:approvelt/features/home/screens/add_request_screen.dart';
+import 'package:approvelt/models/request_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,16 +14,25 @@ const List<String> filterList = <String>[
   'Not Approved',
   'Expired'
 ];
+
 final dropDownStateValueProvider =
     StateProvider<String>((ref) => filterList.first);
 
+final filteredDataProvider =
+    StateProvider<List<RequestItemModel>>((ref) => ref.read(fetchDataProvider));
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
+
+  void updateFilterData(String value, WidgetRef ref) {
+    ref.read(requestProvider.notifier).filterRequests(value);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userModel = ref.watch(userModelProvider);
     final reqProvider = ref.watch(fetchDataProvider);
+    // final filteredData = ref.watch(filteredDataProvider);
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,6 +88,7 @@ class HomeScreen extends ConsumerWidget {
                       items: filterList
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
+                          onTap: () => updateFilterData(value, ref),
                           value: value,
                           child: Text(value),
                         );

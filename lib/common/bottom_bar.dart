@@ -1,5 +1,3 @@
-import 'package:approvelt/common/error_screen.dart';
-import 'package:approvelt/common/loader_screen.dart';
 import 'package:approvelt/constants/global_variable.dart';
 import 'package:approvelt/features/auth/providers/auth_provider.dart';
 import 'package:approvelt/features/home/provider/request_item_provider.dart';

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:approvelt/constants/typedefs.dart';
 import 'package:approvelt/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,4 +51,6 @@ class AuthService {
       return UserModel.fromMap(userMap as Map<String, dynamic>);
     });
   }
+
+  
 }
