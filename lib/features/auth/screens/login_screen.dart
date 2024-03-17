@@ -9,8 +9,6 @@ import 'package:approvelt/features/auth/widgets/text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum Type { user, admin }
-
 class LoginScreen extends ConsumerStatefulWidget {
   static const String routName = '/login';
   const LoginScreen({super.key});
@@ -102,26 +100,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14),
-                                    child: Row(
-                                      children: [
-                                        Radio<Type>(
-                                          fillColor: MaterialStateProperty.all(
-                                              Colors.black),
-                                          value: Type.user,
-                                          groupValue: _type,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _type = value!;
-                                            });
-                                          },
-                                        ),
-                                        TextUtil(text: "User")
-                                      ],
-                                    ),
-                                  ),
                                   Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 14),

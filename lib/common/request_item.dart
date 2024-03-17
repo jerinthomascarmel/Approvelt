@@ -1,127 +1,135 @@
-import 'dart:ffi';
-
 import 'package:approvelt/constants/global_variable.dart';
+import 'package:approvelt/features/home/screens/display_item_card.dart';
+import 'package:approvelt/models/request_item_model.dart';
 import 'package:flutter/material.dart';
 
 class RequestItem extends StatelessWidget {
-  const RequestItem({super.key});
+  final BuildContext context;
+  final RequestItemModel itemModel;
+  const RequestItem(
+      {super.key, required this.itemModel, required this.context});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        // print("On Tapped " + task.id.toString());
-        // _showBottomSheet(context, task);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), gradient: orangeGradient),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      "jerin thomas",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+    final DateTime endDateInDateTime = DateTime.parse(itemModel.endDate);
+    final DateTime dateNowInDateTime =
+        DateTime.parse(DateTime.now().toString().split(' ')[0]);
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10), gradient: orangeGradient),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    itemModel.subject,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                GestureDetector(
+                    onTap: () => Navigator.pushNamed(
+                        context, DisplayItemCard.routeName,
+                        arguments: itemModel),
+                    child: const Icon(
+                      Icons.arrow_forward,
+                    ))
+              ],
+            ),
+            Divider(
+              color: Colors.grey.shade400,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range_rounded,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          // "June 11,2022",
+                          itemModel.startDate,
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.white),
+                        ),
+                      ],
                     ),
-                  ),
-                  Icon(Icons.arrow_forward)
-                ],
-              ),
-              Divider(
-                color: Colors.grey.shade400,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.date_range_rounded,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            "June 11,2022",
-                            style: TextStyle(fontSize: 15, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.watch_later_outlined,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 10),
-                          // NOTE 24 hours to am pm
-                          Text(
-                            "3.35 PM",
-                            style: TextStyle(fontSize: 15, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Text(
-                    "To ",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.date_range_rounded,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            "June 11,2022",
-                            style: TextStyle(fontSize: 15, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.watch_later_outlined,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 10),
-                          // NOTE 24 hours to am pm
-                          Text(
-                            "3.35 PM",
-                            style: TextStyle(fontSize: 15, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+                const Text(
+                  "To ",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range_rounded,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          // "June 11,2022",
+                          itemModel.endDate,
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 40,
+              width: 120,
+              decoration: BoxDecoration(
+                  gradient: endDateInDateTime.isBefore(dateNowInDateTime)
+                      ? redGradient
+                      : itemModel.isApproved
+                          ? greenGradient
+                          : itemModel.isDenied
+                              ? redGradient
+                              : purpleGradient,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: Center(
+                  child: Text(
+                endDateInDateTime.isBefore(dateNowInDateTime)
+                    ? "Expired!"
+                    : itemModel.isApproved
+                        ? "Approved"
+                        : itemModel.isDenied
+                            ? "Denied"
+                            : "Not Approved",
+              )),
+            )
+          ],
         ),
       ),
     );
@@ -159,15 +167,15 @@ Widget defaultTextFormField(
         readOnly: readonly,
         obscureText: obscure,
         onChanged: onchange,
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.normal,
         ),
         decoration: InputDecoration(
           labelText: text,
-          hintText: hinttext ?? null,
+          hintText: hinttext,
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
-          border: border ?? OutlineInputBorder(),
+          border: border ?? const OutlineInputBorder(),
         ),
         validator: onvalidate);
 
@@ -183,18 +191,18 @@ Widget defaultButton(
         bool? isUppercase}) =>
     Container(
       width: width,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius),
+          color: background,
+          gradient: gradient),
       child: MaterialButton(
         height: height,
         onPressed: onpress,
         child: Text(
           (isUppercase != null && isUppercase) ? text.toUpperCase() : text,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
       ),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius),
-          color: background,
-          gradient: gradient),
     );

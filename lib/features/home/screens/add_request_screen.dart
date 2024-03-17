@@ -1,26 +1,36 @@
 import 'dart:developer';
+import 'package:approvelt/common/loader_screen.dart';
 import 'package:approvelt/common/request_item.dart';
 import 'package:approvelt/constants/theme.dart';
+import 'package:approvelt/features/home/provider/request_item_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddEventScreen extends StatelessWidget {
+class AddEventScreen extends ConsumerWidget {
+  AddEventScreen({super.key});
   static const String routeName = "/home/add_screen";
-  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  var titlecontroller = TextEditingController();
-  var fromDatecontroller = TextEditingController();
-  var toDatecontroller = TextEditingController();
-  var starttimecontroller = TextEditingController();
-  var endtimecontroller = TextEditingController();
-  var remindcontroller = TextEditingController();
-  var descriptionController = TextEditingController();
-  List<int> remindList = [5, 10, 15, 20];
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final titlecontroller = TextEditingController();
+  final descriptionController = TextEditingController();
+  final fromDatecontroller = TextEditingController();
+  final toDatecontroller = TextEditingController();
+
+  void saveRequestItem(WidgetRef ref, BuildContext context) async {
+    ref.read(requestProvider.notifier).addRequestItemModel(
+        titlecontroller.text,
+        descriptionController.text,
+        fromDatecontroller.text,
+        toDatecontroller.text,
+        context);
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = ref.watch(requestProvider);
     return Scaffold(
-      appBar: _appbar(context),
-      body: _buildFromAddTask(context),
+      appBar: _appbar(context, ref),
+      body: isLoading ? const LoadingScreen() : _buildFromAddTask(context),
     );
   }
 
@@ -51,6 +61,7 @@ class AddEventScreen extends StatelessWidget {
                           if (value!.isEmpty) {
                             return "title must not be empty";
                           }
+                          return null;
                         },
                         text: "Subject"),
                     const SizedBox(
@@ -65,6 +76,7 @@ class AddEventScreen extends StatelessWidget {
                         if (value!.isEmpty) {
                           return "title must not be empty";
                         }
+                        return null;
                       },
                     ),
                     const SizedBox(
@@ -95,6 +107,7 @@ class AddEventScreen extends StatelessWidget {
                               if (value == null || value.isEmpty) {
                                 return "date must not be empty";
                               }
+                              return null;
                             },
                             text: "From date"),
                         const SizedBox(
@@ -102,7 +115,7 @@ class AddEventScreen extends StatelessWidget {
                         ),
                         defaultTextFormField(
                             readonly: true,
-                            controller: fromDatecontroller,
+                            controller: toDatecontroller,
                             inputtype: TextInputType.datetime,
                             prefixIcon: const Icon(Icons.date_range),
                             ontap: () {
@@ -116,13 +129,14 @@ class AddEventScreen extends StatelessWidget {
                                 if (value == null) return;
                                 log(value.toString());
                                 var tdate = value.toString().split(' ');
-                                fromDatecontroller.text = tdate[0];
+                                toDatecontroller.text = tdate[0];
                               });
                             },
                             onvalidate: (value) {
                               if (value == null || value.isEmpty) {
                                 return "date must not be empty";
                               }
+                              return null;
                             },
                             text: "To date"),
                       ],
@@ -135,7 +149,7 @@ class AddEventScreen extends StatelessWidget {
         ),
       );
 
-  _appbar(BuildContext context) {
+  _appbar(BuildContext context, WidgetRef ref) {
     return AppBar(
       backgroundColor: defaultLightColor,
       leading: IconButton(
@@ -152,7 +166,9 @@ class AddEventScreen extends StatelessWidget {
           child: ElevatedButton.icon(
             onPressed: () async {
               if (_formkey.currentState!.validate()) {
-              } else {}
+                log("coming");
+                saveRequestItem(ref, context);
+              }
             },
             icon: const Icon(
               Icons.done,

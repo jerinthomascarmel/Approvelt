@@ -37,7 +37,6 @@ class AuthService {
         name: name,
         type: type,
       );
-      log(userModel.toJson());
       await users.doc(uid).set(userModel.toMap());
       return right(userCredential);
     } on FirebaseAuthException catch (e) {
@@ -45,5 +44,13 @@ class AuthService {
     } catch (e) {
       return left(e.toString());
     }
+  }
+
+  static Stream<UserModel> getCurrentUserModelStream() {
+    String uid = auth.currentUser!.uid;
+    return firestore.collection('users').doc(uid).snapshots().map((event) {
+      final userMap = event.data();
+      return UserModel.fromMap(userMap as Map<String, dynamic>);
+    });
   }
 }

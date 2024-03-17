@@ -1,25 +1,43 @@
 import 'package:approvelt/features/auth/screens/auth_checker_screen.dart';
 import 'package:approvelt/features/auth/services/auth_service.dart';
+import 'package:approvelt/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final userModelProvider = StateProvider<UserModel>((ref) =>
+    UserModel(uid: '', email: '', password: '', name: '', type: 'user'));
+
 final authenticationProvider =
     StateNotifierProvider<Authentication, bool>((ref) {
-  return Authentication(false);
+  return Authentication(false, ref);
 });
 
 final authStateProvider = StreamProvider<User?>((ref) {
   return ref.read(authenticationProvider.notifier).authStateChange;
 });
 
+final getUserModelStreamProvider = StreamProvider<UserModel>((ref) =>
+    ref.read(authenticationProvider.notifier).getCurrentUserModelStream);
+
 class Authentication extends StateNotifier<bool> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final Ref ref;
 
-  Authentication(super.state);
-
+  Authentication(super.state, this.ref);
   Stream<User?> get authStateChange => _auth.authStateChanges();
+  Stream<UserModel> get getCurrentUserModelStream =>
+      AuthService.getCurrentUserModelStream();
 
+  //update current user
+  void updateCurrentUser() {
+    var userStream = AuthService.getCurrentUserModelStream();
+    userStream.listen((UserModel userModel) {
+      ref.read(userModelProvider.notifier).update((state) => userModel);
+    });
+  }
+
+  //sigin User
   Future<void> signInWithEmailAndPassword(
       String email, String password, BuildContext context) async {
     state = true;

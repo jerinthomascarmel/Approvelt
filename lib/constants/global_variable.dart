@@ -28,3 +28,39 @@ LinearGradient get orangeGradient {
     ],
   );
 }
+
+LinearGradient get greenGradient {
+  return LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Colors.green,
+      Colors.green.shade400,
+      Colors.green.shade300,
+    ],
+  );
+}
+
+LinearGradient get redGradient {
+  return LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Colors.red,
+      Colors.red.shade400,
+      Colors.red.shade300,
+    ],
+  );
+}
+
+LinearGradient get purpleGradient {
+  return LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Colors.purple,
+      Colors.purple.shade400,
+      Colors.purple.shade300,
+    ],
+  );
+}
