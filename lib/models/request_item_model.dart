@@ -11,6 +11,7 @@ class RequestItemModel {
   final String endDate;
   final bool isDenied;
   final String deniedBy;
+  final String nameSentBy;
   RequestItemModel({
     required this.id,
     required this.uid,
@@ -22,6 +23,7 @@ class RequestItemModel {
     required this.endDate,
     required this.isDenied,
     required this.deniedBy,
+    required this.nameSentBy,
   });
 
   RequestItemModel copyWith({
@@ -35,6 +37,7 @@ class RequestItemModel {
     String? endDate,
     bool? isDenied,
     String? deniedBy,
+    String? nameSentBy,
   }) {
     return RequestItemModel(
       id: id ?? this.id,
@@ -47,12 +50,13 @@ class RequestItemModel {
       endDate: endDate ?? this.endDate,
       isDenied: isDenied ?? this.isDenied,
       deniedBy: deniedBy ?? this.deniedBy,
+      nameSentBy: nameSentBy ?? this.nameSentBy,
     );
   }
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
+
     result.addAll({'id': id});
     result.addAll({'uid': uid});
     result.addAll({'subject': subject});
@@ -63,7 +67,8 @@ class RequestItemModel {
     result.addAll({'endDate': endDate});
     result.addAll({'isDenied': isDenied});
     result.addAll({'deniedBy': deniedBy});
-  
+    result.addAll({'nameSentBy': nameSentBy});
+
     return result;
   }
 
@@ -79,6 +84,7 @@ class RequestItemModel {
       endDate: map['endDate'] ?? '',
       isDenied: map['isDenied'] ?? false,
       deniedBy: map['deniedBy'] ?? '',
+      nameSentBy: map['nameSentBy'] ?? '',
     );
   }
 
@@ -89,37 +95,39 @@ class RequestItemModel {
 
   @override
   String toString() {
-    return 'RequestItemModel(id: $id, uid: $uid, subject: $subject, description: $description, isApproved: $isApproved, approvedBy: $approvedBy, startDate: $startDate, endDate: $endDate, isDenied: $isDenied, deniedBy: $deniedBy)';
+    return 'RequestItemModel(id: $id, uid: $uid, subject: $subject, description: $description, isApproved: $isApproved, approvedBy: $approvedBy, startDate: $startDate, endDate: $endDate, isDenied: $isDenied, deniedBy: $deniedBy, nameSentBy: $nameSentBy)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is RequestItemModel &&
-      other.id == id &&
-      other.uid == uid &&
-      other.subject == subject &&
-      other.description == description &&
-      other.isApproved == isApproved &&
-      other.approvedBy == approvedBy &&
-      other.startDate == startDate &&
-      other.endDate == endDate &&
-      other.isDenied == isDenied &&
-      other.deniedBy == deniedBy;
+        other.id == id &&
+        other.uid == uid &&
+        other.subject == subject &&
+        other.description == description &&
+        other.isApproved == isApproved &&
+        other.approvedBy == approvedBy &&
+        other.startDate == startDate &&
+        other.endDate == endDate &&
+        other.isDenied == isDenied &&
+        other.deniedBy == deniedBy &&
+        other.nameSentBy == nameSentBy;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      uid.hashCode ^
-      subject.hashCode ^
-      description.hashCode ^
-      isApproved.hashCode ^
-      approvedBy.hashCode ^
-      startDate.hashCode ^
-      endDate.hashCode ^
-      isDenied.hashCode ^
-      deniedBy.hashCode;
+        uid.hashCode ^
+        subject.hashCode ^
+        description.hashCode ^
+        isApproved.hashCode ^
+        approvedBy.hashCode ^
+        startDate.hashCode ^
+        endDate.hashCode ^
+        isDenied.hashCode ^
+        deniedBy.hashCode ^
+        nameSentBy.hashCode;
   }
 }

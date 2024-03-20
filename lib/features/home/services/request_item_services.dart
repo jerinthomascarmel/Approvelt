@@ -11,7 +11,7 @@ class RequestItemService {
   static FirebaseAuth auth = FirebaseAuth.instance;
 
   static FutureVoid addRequestItem(String subject, String description,
-      String startDate, String endDate) async {
+      String startDate, String endDate,String username) async {
     try {
       var allReqDocs = await firestore.collection('Requests').get();
       int len = allReqDocs.docs.length;
@@ -26,7 +26,7 @@ class RequestItemService {
           startDate: startDate,
           endDate: endDate,
           isDenied: false,
-          deniedBy: '');
+          deniedBy: '', nameSentBy:username );
 
       await firestore
           .collection('Requests')

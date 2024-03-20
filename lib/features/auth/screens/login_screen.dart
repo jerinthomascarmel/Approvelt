@@ -96,33 +96,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 },
                               ),
                               const Spacer(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14),
-                                    child: Row(
-                                      children: [
-                                        Radio<Type>(
-                                          fillColor: MaterialStateProperty.all(
-                                              Colors.black),
-                                          value: Type.admin,
-                                          groupValue: _type,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _type = value!;
-                                            });
-                                          },
-                                        ),
-                                        TextUtil(text: "Admin")
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
                               Center(
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

@@ -1,5 +1,5 @@
+import 'package:approvelt/features/auth/providers/auth_provider.dart';
 import 'package:approvelt/features/auth/services/auth_service.dart';
-import 'package:approvelt/features/home/screens/home_screen.dart';
 import 'package:approvelt/features/home/services/request_item_services.dart';
 import 'package:approvelt/models/request_item_model.dart';
 import 'package:approvelt/models/user_model.dart';
@@ -35,8 +35,9 @@ class RequestProvider extends StateNotifier<bool> {
   Future<void> addRequestItemModel(String subject, String description,
       String startDate, String endDate, BuildContext context) async {
     state = true;
+    String username = ref.read(userModelProvider).name;
     final result = await RequestItemService.addRequestItem(
-        subject, description, startDate, endDate);
+        subject, description, startDate, endDate, username);
 
     result.fold((e) {
       ref.read(requestProvider.notifier).updateFetchData();
@@ -49,52 +50,52 @@ class RequestProvider extends StateNotifier<bool> {
     });
   }
 
-  void filterRequests(String sortBy) {
-    List<RequestItemModel> list = ref.read(fetchDataProvider);
-    switch (sortBy) {
-      case 'All':
-        ref.read(filteredDataProvider.notifier).update((state) => list);
-        break;
+  // void filterRequests(String sortBy) {
+  //   List<RequestItemModel> list = ref.read(fetchDataProvider);
+  //   switch (sortBy) {
+  //     case 'All':
+  //       ref.read(filteredDataProvider.notifier).update((state) => list);
+  //       break;
 
-      case "Approved":
-        List<RequestItemModel> retList = [];
-        for (var element in list) {
-          if (element.isApproved) {
-            retList.add(element);
-          }
-        }
-        ref.read(filteredDataProvider.notifier).update((state) => retList);
-        break;
-      case "Denied":
-        List<RequestItemModel> retList = [];
-        for (var element in list) {
-          if (element.isDenied) {
-            retList.add(element);
-          }
-        }
-        ref.read(filteredDataProvider.notifier).update((state) => retList);
-        break;
+  //     case "Approved":
+  //       List<RequestItemModel> retList = [];
+  //       for (var element in list) {
+  //         if (element.isApproved) {
+  //           retList.add(element);
+  //         }
+  //       }
+  //       ref.read(filteredDataProvider.notifier).update((state) => retList);
+  //       break;
+  //     case "Denied":
+  //       List<RequestItemModel> retList = [];
+  //       for (var element in list) {
+  //         if (element.isDenied) {
+  //           retList.add(element);
+  //         }
+  //       }
+  //       ref.read(filteredDataProvider.notifier).update((state) => retList);
+  //       break;
 
-      case "Not Approved":
-        List<RequestItemModel> retList = [];
-        for (var element in list) {
-          if (!element.isApproved && !element.isDenied) {
-            retList.add(element);
-          }
-        }
-        ref.read(filteredDataProvider.notifier).update((state) => retList);
-        break;
+  //     case "Not Approved":
+  //       List<RequestItemModel> retList = [];
+  //       for (var element in list) {
+  //         if (!element.isApproved && !element.isDenied) {
+  //           retList.add(element);
+  //         }
+  //       }
+  //       ref.read(filteredDataProvider.notifier).update((state) => retList);
+  //       break;
 
-      case "Expired":
-        List<RequestItemModel> retList = [];
-        for (var element in list) {
-          DateTime date = DateTime.parse(element.endDate);
-          if (DateTime.now().isBefore(date)) {
-            retList.add(element);
-          }
-        }
-        ref.read(filteredDataProvider.notifier).update((state) => retList);
-        break;
-    }
-  }
+  //     case "Expired":
+  //       List<RequestItemModel> retList = [];
+  //       for (var element in list) {
+  //         DateTime date = DateTime.parse(element.endDate);
+  //         if (DateTime.now().isBefore(date)) {
+  //           retList.add(element);
+  //         }
+  //       }
+  //       ref.read(filteredDataProvider.notifier).update((state) => retList);
+  //       break;
+  //   }
+  // }
 }

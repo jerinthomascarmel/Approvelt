@@ -3,7 +3,6 @@ import 'package:approvelt/constants/global_variable.dart';
 import 'package:approvelt/features/auth/providers/auth_provider.dart';
 import 'package:approvelt/features/home/provider/request_item_provider.dart';
 import 'package:approvelt/features/home/screens/add_request_screen.dart';
-import 'package:approvelt/models/request_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,14 +17,12 @@ const List<String> filterList = <String>[
 final dropDownStateValueProvider =
     StateProvider<String>((ref) => filterList.first);
 
-final filteredDataProvider =
-    StateProvider<List<RequestItemModel>>((ref) => ref.read(fetchDataProvider));
-
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   void updateFilterData(String value, WidgetRef ref) {
-    ref.read(requestProvider.notifier).filterRequests(value);
+    ref.read(dropDownStateValueProvider.notifier).update((state) => value);
+    ref.read(requestProvider.notifier).updateFetchData();
   }
 
   @override
