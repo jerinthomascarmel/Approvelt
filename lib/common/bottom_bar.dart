@@ -43,10 +43,8 @@ class _BottomBarState extends ConsumerState<BottomBar> {
         appBar: _appbar(context),
         drawer: _drawer(context),
         bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Colors.blue,
           currentIndex: _page,
-          backgroundColor: GlobalVariables.backgroundColor,
-          selectedItemColor: GlobalVariables.selectedNavBarColor,
-          unselectedItemColor: GlobalVariables.unselectedNavBarColor,
           iconSize: 28,
           onTap: updatePage,
           items: [

@@ -64,3 +64,15 @@ LinearGradient get purpleGradient {
     ],
   );
 }
+
+LinearGradient get blueGradient {
+  return LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Colors.blue,
+      Colors.blue.shade400,
+      Colors.blue.shade300,
+    ],
+  );
+}

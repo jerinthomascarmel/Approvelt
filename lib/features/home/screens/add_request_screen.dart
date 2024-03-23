@@ -172,7 +172,7 @@ class AddEventScreen extends ConsumerWidget {
             },
             icon: const Icon(
               Icons.done,
-              color: Colors.white,
+              color: Colors.black,
             ),
             label: const Text("Save"),
           ),

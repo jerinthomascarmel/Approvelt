@@ -67,13 +67,13 @@ class HomeScreen extends ConsumerWidget {
                     onpress: () {
                       Navigator.pushNamed(context, AddEventScreen.routeName);
                     },
-                    gradient: orangeGradient,
+                    gradient: blueGradient,
                     radius: 15),
               if (userModel.type == 'admin')
                 Container(
                   width: 120,
                   decoration: BoxDecoration(
-                    gradient: orangeGradient,
+                    gradient: blueGradient,
                   ),
                   child: Center(
                     child: DropdownButton<String>(
@@ -111,7 +111,9 @@ class HomeScreen extends ConsumerWidget {
               ),
               itemCount: reqProvider.length,
               separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
+                  const SizedBox(
+                height: 7,
+              ),
             ),
           ),
         ],

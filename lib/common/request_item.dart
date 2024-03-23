@@ -15,123 +15,88 @@ class RequestItem extends StatelessWidget {
     final DateTime dateNowInDateTime =
         DateTime.parse(DateTime.now().toString().split(' ')[0]);
     return Container(
+      margin: EdgeInsetsDirectional.symmetric(horizontal: 5),
+      // height: 310,
+      width: double.infinity,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), gradient: orangeGradient),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    itemModel.subject,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-                GestureDetector(
-                    onTap: () => Navigator.pushNamed(
-                        context, DisplayItemCard.routeName,
-                        arguments: itemModel),
-                    child: const Icon(
-                      Icons.arrow_forward,
-                    ))
-              ],
-            ),
-            Divider(
-              color: Colors.grey.shade400,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.date_range_rounded,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          // "June 11,2022",
-                          itemModel.startDate,
-                          style: const TextStyle(
-                              fontSize: 15, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-                const Text(
-                  "To ",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.date_range_rounded,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          // "June 11,2022",
-                          itemModel.endDate,
-                          style: const TextStyle(
-                              fontSize: 15, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 40,
-              width: 120,
-              decoration: BoxDecoration(
-                  gradient: endDateInDateTime.isBefore(dateNowInDateTime)
-                      ? redGradient
-                      : itemModel.isApproved
-                          ? greenGradient
-                          : itemModel.isDenied
-                              ? redGradient
-                              : purpleGradient,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Center(
-                  child: Text(
-                endDateInDateTime.isBefore(dateNowInDateTime)
-                    ? "Expired!"
-                    : itemModel.isApproved
-                        ? "Approved"
-                        : itemModel.isDenied
-                            ? "Denied"
-                            : "Not Approved",
-              )),
-            )
-          ],
+          color: Colors.white, border: Border.all(color: Colors.grey)),
+      child: Column(children: [
+        ListTile(
+          leading: const CircleAvatar(
+            radius: 30.0,
+            backgroundColor: Colors.transparent,
+            backgroundImage: AssetImage("assets/defaultprofile.png"),
+          ),
+          title: Text(itemModel.nameSentBy),
+          subtitle: Text("jovin@gmail.com (to change)"),
+          trailing: IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.info_outline),
+          ),
         ),
-      ),
+        Container(
+          margin: const EdgeInsets.all(5),
+          decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text(itemModel.subject),
+                    const Spacer(),
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.arrow_forward_ios)),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "start date",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          itemModel.startDate,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          "9 PM",
+                          style: TextStyle(color: Colors.grey),
+                        )
+                      ],
+                    ),
+                    Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "end date",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          itemModel.endDate,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          "9 PM",
+                          style: TextStyle(color: Colors.grey),
+                        )
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ]),
     );
   }
 }
