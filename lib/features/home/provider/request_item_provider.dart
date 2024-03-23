@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final fetchDataProvider = StateProvider<List<RequestItemModel>>((ref) => []);
+final fetchUserCardItem = StateProvider<List<UserModel>>((ref) => []);
 final requestProvider =
     StateNotifierProvider<RequestProvider, bool>((ref) => RequestProvider(ref));
 
@@ -36,8 +37,10 @@ class RequestProvider extends StateNotifier<bool> {
       String startDate, String endDate, BuildContext context) async {
     state = true;
     String username = ref.read(userModelProvider).name;
+    String uidEmail = ref.read(userModelProvider).email;
+    // String uidPhotoUrl = ref.read(userModelProvider).uidPhotoUrl;
     final result = await RequestItemService.addRequestItem(
-        subject, description, startDate, endDate, username);
+        subject, description, startDate, endDate, username, uidEmail, '');
 
     result.fold((e) {
       ref.read(requestProvider.notifier).updateFetchData();

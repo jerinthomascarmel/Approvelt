@@ -3,6 +3,8 @@ import 'dart:convert';
 class RequestItemModel {
   final String id;
   final String uid;
+  final String uidEmail;
+  final String uidPhotoUrl;
   final String subject;
   final String description;
   final bool isApproved;
@@ -15,6 +17,8 @@ class RequestItemModel {
   RequestItemModel({
     required this.id,
     required this.uid,
+    required this.uidEmail,
+    required this.uidPhotoUrl,
     required this.subject,
     required this.description,
     required this.isApproved,
@@ -29,6 +33,8 @@ class RequestItemModel {
   RequestItemModel copyWith({
     String? id,
     String? uid,
+    String? uidEmail,
+    String? uidPhotoUrl,
     String? subject,
     String? description,
     bool? isApproved,
@@ -42,6 +48,8 @@ class RequestItemModel {
     return RequestItemModel(
       id: id ?? this.id,
       uid: uid ?? this.uid,
+      uidEmail: uidEmail ?? this.uidEmail,
+      uidPhotoUrl: uidPhotoUrl ?? this.uidPhotoUrl,
       subject: subject ?? this.subject,
       description: description ?? this.description,
       isApproved: isApproved ?? this.isApproved,
@@ -59,6 +67,8 @@ class RequestItemModel {
 
     result.addAll({'id': id});
     result.addAll({'uid': uid});
+    result.addAll({'uidEmail': uidEmail});
+    result.addAll({'uidPhotoUrl': uidPhotoUrl});
     result.addAll({'subject': subject});
     result.addAll({'description': description});
     result.addAll({'isApproved': isApproved});
@@ -76,6 +86,8 @@ class RequestItemModel {
     return RequestItemModel(
       id: map['id'] ?? '',
       uid: map['uid'] ?? '',
+      uidEmail: map['uidEmail'] ?? '',
+      uidPhotoUrl: map['uidPhotoUrl'] ?? '',
       subject: map['subject'] ?? '',
       description: map['description'] ?? '',
       isApproved: map['isApproved'] ?? false,
@@ -95,7 +107,7 @@ class RequestItemModel {
 
   @override
   String toString() {
-    return 'RequestItemModel(id: $id, uid: $uid, subject: $subject, description: $description, isApproved: $isApproved, approvedBy: $approvedBy, startDate: $startDate, endDate: $endDate, isDenied: $isDenied, deniedBy: $deniedBy, nameSentBy: $nameSentBy)';
+    return 'RequestItemModel(id: $id, uid: $uid, uidEmail: $uidEmail, uidPhotoUrl: $uidPhotoUrl, subject: $subject, description: $description, isApproved: $isApproved, approvedBy: $approvedBy, startDate: $startDate, endDate: $endDate, isDenied: $isDenied, deniedBy: $deniedBy, nameSentBy: $nameSentBy)';
   }
 
   @override
@@ -105,6 +117,8 @@ class RequestItemModel {
     return other is RequestItemModel &&
         other.id == id &&
         other.uid == uid &&
+        other.uidEmail == uidEmail &&
+        other.uidPhotoUrl == uidPhotoUrl &&
         other.subject == subject &&
         other.description == description &&
         other.isApproved == isApproved &&
@@ -120,6 +134,8 @@ class RequestItemModel {
   int get hashCode {
     return id.hashCode ^
         uid.hashCode ^
+        uidEmail.hashCode ^
+        uidPhotoUrl.hashCode ^
         subject.hashCode ^
         description.hashCode ^
         isApproved.hashCode ^

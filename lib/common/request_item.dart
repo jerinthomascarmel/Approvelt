@@ -1,4 +1,3 @@
-import 'package:approvelt/constants/global_variable.dart';
 import 'package:approvelt/features/home/screens/display_item_card.dart';
 import 'package:approvelt/models/request_item_model.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,7 @@ class RequestItem extends StatelessWidget {
             backgroundImage: AssetImage("assets/defaultprofile.png"),
           ),
           title: Text(itemModel.nameSentBy),
-          subtitle: Text("jovin@gmail.com (to change)"),
+          subtitle: Text(itemModel.uidEmail),
           trailing: IconButton(
             onPressed: () {},
             icon: const Icon(Icons.info_outline),

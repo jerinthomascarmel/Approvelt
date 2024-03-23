@@ -47,8 +47,8 @@ class DisplayItemCard extends ConsumerWidget {
           child: Column(children: [
             Container(
               width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(15),
                       bottomRight: Radius.circular(15)),
                   color: Colors.white),
@@ -79,7 +79,7 @@ class DisplayItemCard extends ConsumerWidget {
                       backgroundColor: Colors.transparent,
                     ),
                     title: Text(itemModel.nameSentBy),
-                    subtitle: const Text("jovin@gmail.com"),
+                    subtitle: Text(itemModel.uidEmail),
                   ),
                 ],
               ),
@@ -130,7 +130,7 @@ class DisplayItemCard extends ConsumerWidget {
                                   const Icon(Icons.date_range),
                                   Text(
                                     itemModel.startDate,
-                                    style: TextStyle(color: Colors.grey),
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -181,26 +181,48 @@ class DisplayItemCard extends ConsumerWidget {
                     ),
                     Row(
                       children: [
-                        const Column(
-                          children: [
-                            Text("Approved By"),
-                            Text(
-                              "Dr.Shajulin",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
+                        dateNowInDateTime.isAfter(endDateInDateTime)
+                            ? const SizedBox()
+                            : (itemModel.isApproved == itemModel.isDenied)
+                                ? const SizedBox()
+                                : itemModel.isApproved
+                                    ? Column(
+                                        children: [
+                                          const Text("Approved By"),
+                                          Text(
+                                            itemModel.approvedBy,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      )
+                                    : Column(
+                                        children: [
+                                          const Text("Denied By"),
+                                          Text(
+                                            itemModel.deniedBy,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
                         const Spacer(),
                         Container(
-                          width: 100,
+                          width: 120,
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: Colors.blue.shade900),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              "Approved",
-                              style: TextStyle(color: Colors.white),
+                              dateNowInDateTime.isAfter(endDateInDateTime)
+                                  ? "Expired"
+                                  : (itemModel.isApproved == itemModel.isDenied)
+                                      ? "Not Checked"
+                                      : itemModel.isApproved
+                                          ? "Approved"
+                                          : "Denied",
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                         )
@@ -228,8 +250,8 @@ class DisplayItemCard extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(5.0),
                               ))),
                           onPressed: () {},
-                          icon: Icon(Icons.qr_code),
-                          label: Text(
+                          icon: const Icon(Icons.qr_code),
+                          label: const Text(
                             "Show QR Code",
                             style: TextStyle(color: Colors.white),
                           )),

@@ -28,12 +28,14 @@ class AuthService {
       );
       CollectionReference users = firestore.collection('users');
       String uid = userCredential.user!.uid;
+      String photoUrl = '';
       UserModel userModel = UserModel(
         uid: uid,
         email: email,
         password: password,
         name: name,
         type: type,
+        uidPhotoUrl: photoUrl
       );
       await users.doc(uid).set(userModel.toMap());
       return right(userCredential);
@@ -51,6 +53,4 @@ class AuthService {
       return UserModel.fromMap(userMap as Map<String, dynamic>);
     });
   }
-
-  
 }

@@ -6,6 +6,7 @@ class UserModel {
   final String password;
   final String name;
   final String type;
+  final String uidPhotoUrl;
 
   UserModel({
     required this.uid,
@@ -13,8 +14,8 @@ class UserModel {
     required this.password,
     required this.name,
     required this.type,
+    required this.uidPhotoUrl,
   });
-  
 
   UserModel copyWith({
     String? uid,
@@ -22,6 +23,7 @@ class UserModel {
     String? password,
     String? name,
     String? type,
+    String? uidPhotoUrl,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -29,6 +31,7 @@ class UserModel {
       password: password ?? this.password,
       name: name ?? this.name,
       type: type ?? this.type,
+      uidPhotoUrl: uidPhotoUrl ?? this.uidPhotoUrl,
     );
   }
 
@@ -40,6 +43,7 @@ class UserModel {
     result.addAll({'password': password});
     result.addAll({'name': name});
     result.addAll({'type': type});
+    result.addAll({'uidPhotoUrl': uidPhotoUrl});
   
     return result;
   }
@@ -51,16 +55,18 @@ class UserModel {
       password: map['password'] ?? '',
       name: map['name'] ?? '',
       type: map['type'] ?? '',
+      uidPhotoUrl: map['uidPhotoUrl'] ?? '',
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, email: $email, password: $password, name: $name, type: $type)';
+    return 'UserModel(uid: $uid, email: $email, password: $password, name: $name, type: $type, uidPhotoUrl: $uidPhotoUrl)';
   }
 
   @override
@@ -72,7 +78,8 @@ class UserModel {
       other.email == email &&
       other.password == password &&
       other.name == name &&
-      other.type == type;
+      other.type == type &&
+      other.uidPhotoUrl == uidPhotoUrl;
   }
 
   @override
@@ -81,6 +88,7 @@ class UserModel {
       email.hashCode ^
       password.hashCode ^
       name.hashCode ^
-      type.hashCode;
+      type.hashCode ^
+      uidPhotoUrl.hashCode;
   }
 }
