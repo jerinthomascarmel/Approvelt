@@ -47,12 +47,11 @@ class DisplayItemCard extends ConsumerWidget {
           child: Column(children: [
             Container(
               width: double.infinity,
-              height: 250,
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30)),
-                  gradient: orangeGradient),
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15)),
+                  color: Colors.white),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -74,166 +73,169 @@ class DisplayItemCard extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  ListTile(
+                    leading: const CircleAvatar(
+                      backgroundImage: AssetImage("assets/defaultprofile.png"),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    title: Text(itemModel.nameSentBy),
+                    subtitle: const Text("jovin@gmail.com"),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Text(
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                padding: const EdgeInsets.all(9),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
                       itemModel.subject,
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 35),
+                          fontWeight: FontWeight.bold, fontSize: 30),
                     ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        if (itemModel.isApproved)
-                          const Text(
-                            "Approved By,\nDr.Shajulin",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 30),
-                          ),
-                        if (!itemModel.isApproved)
-                          const Text(
-                            "Not \nApproved Yet!",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 30),
-                          ),
-                        const Spacer(),
-                        defaultButton(
-                            text: endDateInDateTime.isBefore(dateNowInDateTime)
-                                ? "Expired!"
-                                : itemModel.isApproved
-                                    ? "Approved"
-                                    : itemModel.isDenied
-                                        ? "Denied"
-                                        : "Not Approved",
-                            width: 120,
-                            onpress: () {},
-                            gradient:
-                                endDateInDateTime.isBefore(dateNowInDateTime)
-                                    ? redGradient
-                                    : itemModel.isApproved
-                                        ? greenGradient
-                                        : itemModel.isDenied
-                                            ? redGradient
-                                            : purpleGradient,
-                            radius: 15),
-                      ],
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 12),
-                    child: Row(
-                      children: [
-                        Text(
-                          "starts: ${itemModel.startDate}",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 16),
-                        ),
-                        const Spacer(),
-                        Text("expires: ${itemModel.endDate}",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w400, fontSize: 16))
-                      ],
+                    Text(
+                      itemModel.description,
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.normal),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              padding: const EdgeInsets.all(12),
-              width: double.infinity,
-              height: 250,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  gradient: orangeGradient),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    " Description: ",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      width: double.infinity,
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                          border: Border.all(
-                              color: const Color.fromARGB(255, 117, 112, 112))),
-                      child: Text(
-                        itemModel.description,
-                        style: const TextStyle(fontSize: 16),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey)),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "      Start date",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(Icons.date_range),
+                                  Text(
+                                    itemModel.startDate,
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              const Row(
+                                children: [
+                                  Icon(Icons.lock_clock),
+                                  Text(
+                                    "9 PM",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          const Spacer(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "      End date",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(Icons.date_range),
+                                  Text(
+                                    itemModel.endDate,
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              const Row(
+                                children: [
+                                  Icon(Icons.lock_clock),
+                                  Text(
+                                    "9 PM",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  )
-                ],
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        const Column(
+                          children: [
+                            Text("Approved By"),
+                            Text(
+                              "Dr.Shajulin",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        const Spacer(),
+                        Container(
+                          width: 100,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.blue.shade900),
+                          child: const Center(
+                            child: Text(
+                              "Approved",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            if (ref.watch(userModelProvider).type == "user")
-              defaultButton(
-                  height: 60,
-                  text: "Get the QR Code",
-                  width: double.infinity,
-                  onpress: () => navigateToQR(context, itemModel),
-                  gradient: const LinearGradient(colors: [
-                    Color.fromARGB(255, 255, 198, 9),
-                    Colors.deepOrange,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: TextButton.icon(
+                          style: ButtonStyle(
+                              iconColor: MaterialStateProperty.resolveWith(
+                                  (states) => Colors.white),
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith(
+                                      (states) => Colors.blue.shade900),
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ))),
+                          onPressed: () {},
+                          icon: Icon(Icons.qr_code),
+                          label: Text(
+                            "Show QR Code",
+                            style: TextStyle(color: Colors.white),
+                          )),
+                    ),
                   ]),
-                  radius: 15),
-            const SizedBox(
-              height: 10,
-            ),
-            if (ref.watch(userModelProvider).type == "admin")
-              Row(
-                children: [
-                  Expanded(
-                    child: defaultButton(
-                        text: !isLoading ? "Approve" : "loading...",
-                        width: double.infinity,
-                        onpress: () => approveRequest(itemModel, ref, context),
-                        gradient: const LinearGradient(colors: [
-                          Color.fromARGB(255, 255, 198, 9),
-                          Colors.deepOrange,
-                        ]),
-                        radius: 15),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Expanded(
-                    child: defaultButton(
-                        text: isLoading ? "loading.." : "Deny",
-                        width: double.infinity,
-                        onpress: () => denyRequest(itemModel, ref, context),
-                        gradient: const LinearGradient(colors: [
-                          Color.fromARGB(255, 255, 198, 9),
-                          Colors.deepOrange,
-                        ]),
-                        radius: 15),
-                  ),
-                ],
-              ),
+            )
           ]),
         ),
       ),

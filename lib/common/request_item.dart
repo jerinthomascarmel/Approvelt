@@ -19,7 +19,8 @@ class RequestItem extends StatelessWidget {
       // height: 310,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Colors.white, border: Border.all(color: Colors.grey)),
+        color: Colors.white,
+      ),
       child: Column(children: [
         ListTile(
           leading: const CircleAvatar(
@@ -46,7 +47,9 @@ class RequestItem extends StatelessWidget {
                     Text(itemModel.subject),
                     const Spacer(),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () => Navigator.pushNamed(
+                            context, DisplayItemCard.routeName,
+                            arguments: itemModel),
                         icon: const Icon(Icons.arrow_forward_ios)),
                     const SizedBox(
                       width: 10,
