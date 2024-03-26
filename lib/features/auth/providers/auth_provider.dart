@@ -1,14 +1,12 @@
 import 'package:approvelt/features/auth/screens/auth_checker_screen.dart';
 import 'package:approvelt/features/auth/services/auth_service.dart';
-import 'package:approvelt/features/home/provider/request_item_provider.dart';
-import 'package:approvelt/models/request_item_model.dart';
 import 'package:approvelt/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final userModelProvider = StateProvider<UserModel>((ref) =>
-    UserModel(uid: '', email: '', password: '', name: '', type: 'user'));
+final userModelProvider = StateProvider<UserModel>((ref) => UserModel(
+    uid: '', email: '', password: '', name: '', type: 'user', uidPhotoUrl: ''));
 
 final authenticationProvider =
     StateNotifierProvider<Authentication, bool>((ref) {
@@ -98,6 +96,4 @@ class Authentication extends StateNotifier<bool> {
   Future<void> signOut() async {
     await _auth.signOut();
   }
-
-  
 }

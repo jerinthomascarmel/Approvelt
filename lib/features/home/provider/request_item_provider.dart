@@ -1,5 +1,6 @@
 import 'package:approvelt/features/auth/providers/auth_provider.dart';
 import 'package:approvelt/features/auth/services/auth_service.dart';
+import 'package:approvelt/features/home/screens/home_screen.dart';
 import 'package:approvelt/features/home/services/request_item_services.dart';
 import 'package:approvelt/models/request_item_model.dart';
 import 'package:approvelt/models/user_model.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final fetchDataProvider = StateProvider<List<RequestItemModel>>((ref) => []);
+final fetchUserCardItem = StateProvider<List<UserModel>>((ref) => []);
 final requestProvider =
     StateNotifierProvider<RequestProvider, bool>((ref) => RequestProvider(ref));
 
@@ -27,7 +29,8 @@ class RequestProvider extends StateNotifier<bool> {
     var userStream = AuthService.getCurrentUserModelStream();
     userStream.listen((UserModel userModel) {
       fetchData(userModel).listen((event) {
-        ref.read(fetchDataProvider.notifier).update((state) => event);
+        List<RequestItemModel> filteredList = filterRequestsModel(event);
+        ref.read(fetchDataProvider.notifier).update((state) => filteredList);
       });
     });
   }
@@ -36,8 +39,10 @@ class RequestProvider extends StateNotifier<bool> {
       String startDate, String endDate, BuildContext context) async {
     state = true;
     String username = ref.read(userModelProvider).name;
+    String uidEmail = ref.read(userModelProvider).email;
+    // String uidPhotoUrl = ref.read(userModelProvider).uidPhotoUrl;
     final result = await RequestItemService.addRequestItem(
-        subject, description, startDate, endDate, username);
+        subject, description, startDate, endDate, username, uidEmail, '');
 
     result.fold((e) {
       ref.read(requestProvider.notifier).updateFetchData();
@@ -50,52 +55,52 @@ class RequestProvider extends StateNotifier<bool> {
     });
   }
 
-  // void filterRequests(String sortBy) {
-  //   List<RequestItemModel> list = ref.read(fetchDataProvider);
-  //   switch (sortBy) {
-  //     case 'All':
-  //       ref.read(filteredDataProvider.notifier).update((state) => list);
-  //       break;
+  List<RequestItemModel> filterRequestsModel(List<RequestItemModel> list) {
+    String sortBy = ref.read(dropDownStateValueProvider);
+    switch (sortBy) {
+      case 'All':
+        return list;
 
-  //     case "Approved":
-  //       List<RequestItemModel> retList = [];
-  //       for (var element in list) {
-  //         if (element.isApproved) {
-  //           retList.add(element);
-  //         }
-  //       }
-  //       ref.read(filteredDataProvider.notifier).update((state) => retList);
-  //       break;
-  //     case "Denied":
-  //       List<RequestItemModel> retList = [];
-  //       for (var element in list) {
-  //         if (element.isDenied) {
-  //           retList.add(element);
-  //         }
-  //       }
-  //       ref.read(filteredDataProvider.notifier).update((state) => retList);
-  //       break;
+      case "Approved":
+        List<RequestItemModel> retList = [];
+        for (var element in list) {
+          if (element.isApproved) {
+            retList.add(element);
+          }
+        }
+        return retList;
 
-  //     case "Not Approved":
-  //       List<RequestItemModel> retList = [];
-  //       for (var element in list) {
-  //         if (!element.isApproved && !element.isDenied) {
-  //           retList.add(element);
-  //         }
-  //       }
-  //       ref.read(filteredDataProvider.notifier).update((state) => retList);
-  //       break;
+      case "Denied":
+        List<RequestItemModel> retList = [];
+        for (var element in list) {
+          if (element.isDenied) {
+            retList.add(element);
+          }
+        }
 
-  //     case "Expired":
-  //       List<RequestItemModel> retList = [];
-  //       for (var element in list) {
-  //         DateTime date = DateTime.parse(element.endDate);
-  //         if (DateTime.now().isBefore(date)) {
-  //           retList.add(element);
-  //         }
-  //       }
-  //       ref.read(filteredDataProvider.notifier).update((state) => retList);
-  //       break;
-  //   }
-  // }
+        return retList;
+
+      case "Not Checked":
+        List<RequestItemModel> retList = [];
+        for (var element in list) {
+          if (!element.isApproved && !element.isDenied) {
+            retList.add(element);
+          }
+        }
+        return retList;
+
+      case "Expired":
+        List<RequestItemModel> retList = [];
+        for (var element in list) {
+          DateTime date = DateTime.parse(element.endDate);
+          if (DateTime.now().isAfter(date)) {
+            retList.add(element);
+          }
+        }
+        return retList;
+
+      default:
+        return [];
+    }
+  }
 }

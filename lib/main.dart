@@ -20,7 +20,7 @@ class MyApp extends ConsumerWidget {
     final initialize = ref.watch(firebaseinitializerProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: Themes.darkThem,
+      theme: Themes.lightTheme,
       onGenerateRoute: (settings) => generateRoute(settings),
       home: initialize.when(
           data: (data) {

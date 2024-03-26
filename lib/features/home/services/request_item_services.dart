@@ -10,8 +10,14 @@ class RequestItemService {
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static FirebaseAuth auth = FirebaseAuth.instance;
 
-  static FutureVoid addRequestItem(String subject, String description,
-      String startDate, String endDate,String username) async {
+  static FutureVoid addRequestItem(
+      String subject,
+      String description,
+      String startDate,
+      String endDate,
+      String username,
+      String uidEmail,
+      String uidPhotoUrl) async {
     try {
       var allReqDocs = await firestore.collection('Requests').get();
       int len = allReqDocs.docs.length;
@@ -19,6 +25,8 @@ class RequestItemService {
       RequestItemModel itemModel = RequestItemModel(
           id: "Request $len",
           uid: uid,
+          uidEmail: uidEmail,
+          uidPhotoUrl: uidPhotoUrl,
           subject: subject,
           description: description,
           isApproved: false,
@@ -26,7 +34,8 @@ class RequestItemService {
           startDate: startDate,
           endDate: endDate,
           isDenied: false,
-          deniedBy: '', nameSentBy:username );
+          deniedBy: '',
+          nameSentBy: username);
 
       await firestore
           .collection('Requests')
@@ -58,7 +67,7 @@ class RequestItemService {
 
     // if (type == 'admin')
     Stream<QuerySnapshot<Map<String, dynamic>>> snapshot =
-        collectionReference.where('isDenied', isEqualTo: false).snapshots();
+        collectionReference.snapshots();
     return snapshot.map((event) {
       final listOfQuerySnapshots = event.docs;
       return listOfQuerySnapshots

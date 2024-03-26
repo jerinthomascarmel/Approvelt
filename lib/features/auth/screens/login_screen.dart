@@ -21,7 +21,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _loginFormKey = GlobalKey<FormState>();
-  Type _type = Type.user;
 
   @override
   void dispose() {
@@ -45,7 +44,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             body: Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: BoxDecoration(gradient: orangeGradient),
+              decoration: BoxDecoration(gradient: blueGradient),
               alignment: Alignment.center,
               child: Container(
                 height: 400,

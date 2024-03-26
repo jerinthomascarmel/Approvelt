@@ -2,6 +2,7 @@ import 'package:approvelt/constants/global_variable.dart';
 import 'package:approvelt/features/auth/providers/auth_provider.dart';
 import 'package:approvelt/features/home/provider/request_item_provider.dart';
 import 'package:approvelt/features/home/screens/home_screen.dart';
+import 'package:approvelt/features/profile/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,8 +20,8 @@ class _BottomBarState extends ConsumerState<BottomBar> {
   double bottomBarBorderWidth = 5;
 
   List<Widget> pages = [
-    const HomeScreen(),
-    const Text("Me"),
+    HomeScreen(),
+    const ProfileScreen(),
   ];
 
   void updatePage(int page) {
@@ -43,10 +44,8 @@ class _BottomBarState extends ConsumerState<BottomBar> {
         appBar: _appbar(context),
         drawer: _drawer(context),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _page,
-          backgroundColor: GlobalVariables.backgroundColor,
           selectedItemColor: GlobalVariables.selectedNavBarColor,
-          unselectedItemColor: GlobalVariables.unselectedNavBarColor,
+          currentIndex: _page,
           iconSize: 28,
           onTap: updatePage,
           items: [
@@ -91,25 +90,25 @@ class _BottomBarState extends ConsumerState<BottomBar> {
 
   _appbar(BuildContext context) => AppBar(
         title: Text(
-          "My Requests",
-          style: Theme.of(context).textTheme.headline5,
+          _page == 0 ? "Requests" : " Me ",
+          style: const TextStyle(color: Colors.black),
         ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.search,
               size: 30,
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.mode_night,
               size: 30,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           )
         ],
@@ -119,7 +118,7 @@ class _BottomBarState extends ConsumerState<BottomBar> {
         child: Column(
           children: [
             Container(
-              decoration: BoxDecoration(gradient: orangeGradient),
+              decoration: BoxDecoration(gradient: blueGradient),
               padding: const EdgeInsets.only(left: 15, right: 15, top: 40),
               height: 160,
               child: Column(
@@ -148,10 +147,13 @@ class _BottomBarState extends ConsumerState<BottomBar> {
                   const Text(
                     "SIGN OUT",
                     style: TextStyle(
-                        letterSpacing: 2, fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        letterSpacing: 2,
+                        fontWeight: FontWeight.bold),
                   ),
                   const Text(
                     "Synchronization disabled...",
+                    style: TextStyle(color: Colors.white),
                   ),
                 ],
               ),
