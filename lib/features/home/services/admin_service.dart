@@ -12,7 +12,7 @@ class AdminServices {
       RequestItemModel requestItemModel, UserModel userModel) async {
     try {
       String reqId = requestItemModel.id;
-      String approvedBy = userModel.uid;
+      String approvedBy = userModel.name;
       await firestore.collection('Requests').doc(reqId).update(
           {"approvedBy": approvedBy, "isApproved": true, "isDenied": false});
       return right(log("approved Request"));
@@ -25,10 +25,10 @@ class AdminServices {
       RequestItemModel requestItemModel, UserModel userModel) async {
     try {
       String reqId = requestItemModel.id;
-      String deniedBy = userModel.uid;
+      String deniedBy = userModel.name;
       await firestore.collection('Requests').doc(reqId).update(
           {"deniedBy": deniedBy, "isApproved": false, "isDenied": true});
-      return right(log("approved Request"));
+      return right(log("denied Request"));
     } catch (e) {
       return left(e.toString());
     }

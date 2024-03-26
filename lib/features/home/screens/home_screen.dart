@@ -10,7 +10,7 @@ const List<String> filterList = <String>[
   'All',
   'Approved',
   'Denied',
-  'Not Approved',
+  'Not Checked',
   'Expired'
 ];
 
@@ -18,7 +18,9 @@ final dropDownStateValueProvider =
     StateProvider<String>((ref) => filterList.first);
 
 class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+  final fromDateController = TextEditingController();
+  final toDateController = TextEditingController();
 
   void updateFilterData(String value, WidgetRef ref) {
     ref.read(dropDownStateValueProvider.notifier).update((state) => value);
@@ -29,7 +31,6 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userModel = ref.watch(userModelProvider);
     final reqProvider = ref.watch(fetchDataProvider);
-    // final filteredData = ref.watch(filteredDataProvider);
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,13 +54,47 @@ class HomeScreen extends ConsumerWidget {
                   Text(
                     userModel.name == ''
                         ? "UNKNOWN"
-                        : userModel.name.toUpperCase(),
+                        : " ${userModel.name.toUpperCase()}",
                     style: const TextStyle(
                         fontSize: 25, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
               const Spacer(),
+              Row(
+                children: [
+                  const Text(
+                    "Sort By",
+                    style: TextStyle(color: Colors.black54),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  DropdownButton<String>(
+                    icon: const Icon(Icons.arrow_drop_down),
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.black, fontSize: 13),
+                    alignment: Alignment.center,
+                    value: ref.watch(dropDownStateValueProvider),
+                    items: filterList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        onTap: () => updateFilterData(value, ref),
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      ref
+                          .read(dropDownStateValueProvider.notifier)
+                          .update((state) => value!);
+                    },
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                ],
+              ),
               if (userModel.type == 'user')
                 defaultButton(
                     text: "Add Request",
@@ -68,36 +103,10 @@ class HomeScreen extends ConsumerWidget {
                       Navigator.pushNamed(context, AddEventScreen.routeName);
                     },
                     gradient: blueGradient,
-                    radius: 15),
-              if (userModel.type == 'admin')
-                Container(
-                  width: 120,
-                  decoration: BoxDecoration(
-                    gradient: blueGradient,
-                  ),
-                  child: Center(
-                    child: DropdownButton<String>(
-                      icon: const Icon(Icons.arrow_drop_down),
-                      elevation: 16,
-                      style: const TextStyle(color: Colors.white, fontSize: 13),
-                      alignment: Alignment.center,
-                      value: ref.watch(dropDownStateValueProvider),
-                      items: filterList
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          onTap: () => updateFilterData(value, ref),
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? value) {
-                        ref
-                            .read(dropDownStateValueProvider.notifier)
-                            .update((state) => value!);
-                      },
-                    ),
-                  ),
-                ),
+                    radius: 8),
+              const SizedBox(
+                width: 8,
+              ),
             ],
           ),
           const SizedBox(
@@ -105,16 +114,13 @@ class HomeScreen extends ConsumerWidget {
           ),
           Expanded(
             child: ListView.separated(
-              itemBuilder: (context, index) => RequestItem(
-                itemModel: reqProvider[index],
-                context: context,
-              ),
-              itemCount: reqProvider.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(
-                height: 7,
-              ),
-            ),
+                itemBuilder: (context, index) => RequestItem(
+                      itemModel: reqProvider[index],
+                      context: context,
+                    ),
+                itemCount: reqProvider.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider()),
           ),
         ],
       ),

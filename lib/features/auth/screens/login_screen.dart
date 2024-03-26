@@ -44,7 +44,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             body: Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: BoxDecoration(gradient: orangeGradient),
+              decoration: BoxDecoration(gradient: blueGradient),
               alignment: Alignment.center,
               child: Container(
                 height: 400,

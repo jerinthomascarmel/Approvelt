@@ -67,7 +67,7 @@ class RequestItemService {
 
     // if (type == 'admin')
     Stream<QuerySnapshot<Map<String, dynamic>>> snapshot =
-        collectionReference.where('isDenied', isEqualTo: false).snapshots();
+        collectionReference.snapshots();
     return snapshot.map((event) {
       final listOfQuerySnapshots = event.docs;
       return listOfQuerySnapshots

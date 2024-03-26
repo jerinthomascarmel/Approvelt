@@ -13,56 +13,8 @@ class GlobalVariables {
   static const secondaryColor = Color.fromRGBO(148, 139, 127, 1);
   static const backgroundColor = Colors.black54;
   static const Color greyBackgroundCOlor = Color(0xffebecee);
-  static var selectedNavBarColor = Colors.red;
+  static var selectedNavBarColor = Colors.blue.shade900;
   static const unselectedNavBarColor = Colors.white;
-}
-
-LinearGradient get orangeGradient {
-  return LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [
-      Colors.deepOrange,
-      Colors.deepOrange.shade400,
-      Colors.deepOrange.shade300,
-    ],
-  );
-}
-
-LinearGradient get greenGradient {
-  return LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [
-      Colors.green,
-      Colors.green.shade400,
-      Colors.green.shade300,
-    ],
-  );
-}
-
-LinearGradient get redGradient {
-  return LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [
-      Colors.red,
-      Colors.red.shade400,
-      Colors.red.shade300,
-    ],
-  );
-}
-
-LinearGradient get purpleGradient {
-  return LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [
-      Colors.purple,
-      Colors.purple.shade400,
-      Colors.purple.shade300,
-    ],
-  );
 }
 
 LinearGradient get blueGradient {
@@ -70,9 +22,9 @@ LinearGradient get blueGradient {
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
-      Colors.blue,
-      Colors.blue.shade400,
-      Colors.blue.shade300,
+      Colors.blue.shade900,
+      Colors.blue.shade800,
+      Colors.blue.shade600,
     ],
   );
 }

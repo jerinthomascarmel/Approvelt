@@ -1,26 +1,33 @@
+
 import 'package:approvelt/features/home/screens/display_item_card.dart';
 import 'package:approvelt/models/request_item_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RequestItem extends StatelessWidget {
+import 'conversion_date_time.dart';
+
+final requestItemModelProvider =
+    StateProvider<RequestItemModel?>((ref) => null);
+
+class RequestItem extends ConsumerWidget {
   final BuildContext context;
   final RequestItemModel itemModel;
   const RequestItem(
       {super.key, required this.itemModel, required this.context});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final DateTime endDateInDateTime = DateTime.parse(itemModel.endDate);
     final DateTime dateNowInDateTime =
         DateTime.parse(DateTime.now().toString().split(' ')[0]);
     return Container(
-      margin: EdgeInsetsDirectional.symmetric(horizontal: 5),
+      margin: const EdgeInsetsDirectional.symmetric(horizontal: 5),
       // height: 310,
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
       ),
-      child: Column(children: [
+      child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
         ListTile(
           leading: const CircleAvatar(
             radius: 30.0,
@@ -43,12 +50,22 @@ class RequestItem extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(itemModel.subject),
+                    Text(
+                      itemModel.subject,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
                     const Spacer(),
                     IconButton(
-                        onPressed: () => Navigator.pushNamed(
-                            context, DisplayItemCard.routeName,
-                            arguments: itemModel),
+                        onPressed: () {
+                          ref
+                              .read(requestItemModelProvider.notifier)
+                              .update((state) => itemModel);
+                          Navigator.pushNamed(
+                            context,
+                            DisplayItemCard.routeName,
+                          );
+                        },
                         icon: const Icon(Icons.arrow_forward_ios)),
                     const SizedBox(
                       width: 10,
@@ -60,44 +77,93 @@ class RequestItem extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "start date",
-                          style: TextStyle(color: Colors.grey),
+                        const Text(
+                          "      start date",
+                          style: TextStyle(color: Colors.black87, fontSize: 15),
                         ),
-                        Text(
-                          itemModel.startDate,
-                          style: TextStyle(color: Colors.grey),
+                        Row(
+                          children: [
+                            const Icon(Icons.date_range),
+                            Text(
+                              dateToDate(itemModel.startDate),
+                              style: const TextStyle(
+                                  color: Colors.black87, fontSize: 15),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "9 PM",
-                          style: TextStyle(color: Colors.grey),
-                        )
+                        Row(
+                          children: [
+                            const Icon(Icons.lock_clock),
+                            Text(
+                              dateToTime(itemModel.startDate),
+                              style: const TextStyle(
+                                  color: Colors.black87, fontSize: 15),
+                            )
+                          ],
+                        ),
                       ],
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "end date",
-                          style: TextStyle(color: Colors.grey),
+                        const Text(
+                          "       end date",
+                          style: TextStyle(color: Colors.black87, fontSize: 15),
                         ),
-                        Text(
-                          itemModel.endDate,
-                          style: TextStyle(color: Colors.grey),
+                        Row(
+                          children: [
+                            const Icon(Icons.date_range),
+                            Text(
+                              dateToDate(itemModel.endDate),
+                              style: const TextStyle(
+                                  color: Colors.black87, fontSize: 15),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "9 PM",
-                          style: TextStyle(color: Colors.grey),
-                        )
+                        Row(
+                          children: [
+                            const Icon(Icons.lock_clock),
+                            Text(
+                              dateToTime(itemModel.endDate),
+                              style: const TextStyle(
+                                  color: Colors.black87, fontSize: 15),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ],
-                )
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
               ],
             ),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: 120,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.blue.shade900),
+            child: Center(
+              child: Text(
+                dateNowInDateTime.isAfter(endDateInDateTime)
+                    ? "Expired"
+                    : (itemModel.isApproved == itemModel.isDenied)
+                        ? "Not Checked"
+                        : itemModel.isApproved
+                            ? "Approved"
+                            : "Denied",
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        )
       ]),
     );
   }
@@ -138,6 +204,8 @@ Widget defaultTextFormField(
           fontWeight: FontWeight.normal,
         ),
         decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
           labelText: text,
           hintText: hinttext,
           prefixIcon: prefixIcon,

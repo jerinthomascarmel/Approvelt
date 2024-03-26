@@ -5,6 +5,7 @@ import 'package:approvelt/constants/theme.dart';
 import 'package:approvelt/features/home/provider/request_item_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class AddEventScreen extends ConsumerWidget {
   AddEventScreen({super.key});
@@ -15,14 +16,24 @@ class AddEventScreen extends ConsumerWidget {
   final descriptionController = TextEditingController();
   final fromDatecontroller = TextEditingController();
   final toDatecontroller = TextEditingController();
+  final starttimeController = TextEditingController();
+  final endtimeController = TextEditingController();
+
+  String convertToFullDate(String timeAM, String date) {
+    DateTime val = DateFormat("hh:mm a").parse(timeAM);
+    var tdate = val.toString().split(' ');
+    tdate[0] = date;
+    String fromDate = "${tdate[0]} ${tdate[1]}";
+    return fromDate;
+  }
 
   void saveRequestItem(WidgetRef ref, BuildContext context) async {
-    ref.read(requestProvider.notifier).addRequestItemModel(
-        titlecontroller.text,
-        descriptionController.text,
-        fromDatecontroller.text,
-        toDatecontroller.text,
-        context);
+    String fromDateFull =
+        convertToFullDate(starttimeController.text, fromDatecontroller.text);
+    String toDateFull =
+        convertToFullDate(endtimeController.text, toDatecontroller.text);
+    ref.read(requestProvider.notifier).addRequestItemModel(titlecontroller.text,
+        descriptionController.text, fromDateFull, toDateFull, context);
   }
 
   @override
@@ -74,7 +85,7 @@ class AddEventScreen extends ConsumerWidget {
                       text: 'Description',
                       onvalidate: (value) {
                         if (value!.isEmpty) {
-                          return "title must not be empty";
+                          return "description must not be empty";
                         }
                         return null;
                       },
@@ -82,63 +93,135 @@ class AddEventScreen extends ConsumerWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    Column(
+                    Row(
                       children: [
-                        defaultTextFormField(
-                            readonly: true,
-                            controller: fromDatecontroller,
-                            inputtype: TextInputType.datetime,
-                            prefixIcon: const Icon(Icons.date_range),
-                            ontap: () {
-                              showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime.parse('2010-01-01'),
-                                      lastDate: DateTime.parse('2030-01-01'))
-                                  .then((value) {
-                                //Todo: handle date to string
-                                if (value == null) return;
-                                log(value.toString());
-                                var tdate = value.toString().split(' ');
-                                fromDatecontroller.text = tdate[0];
-                              });
-                            },
-                            onvalidate: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "date must not be empty";
-                              }
-                              return null;
-                            },
-                            text: "From date"),
-                        const SizedBox(
-                          height: 5,
+                        Expanded(
+                          child: defaultTextFormField(
+                              readonly: true,
+                              controller: fromDatecontroller,
+                              inputtype: TextInputType.datetime,
+                              prefixIcon: const Icon(Icons.date_range),
+                              ontap: () {
+                                showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime.parse('2010-01-01'),
+                                        lastDate: DateTime.parse('2030-01-01'))
+                                    .then((value) {
+                                  //Todo: handle date to string
+                                  if (value == null) return;
+                                  log(value.toString());
+                                  var tdate = value.toString().split(' ');
+                                  fromDatecontroller.text = tdate[0];
+                                });
+                              },
+                              onvalidate: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "date must not be empty";
+                                }
+                                return null;
+                              },
+                              text: "From date"),
                         ),
-                        defaultTextFormField(
-                            readonly: true,
-                            controller: toDatecontroller,
-                            inputtype: TextInputType.datetime,
-                            prefixIcon: const Icon(Icons.date_range),
-                            ontap: () {
-                              showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime.parse('2010-01-01'),
-                                      lastDate: DateTime.parse('2030-01-01'))
-                                  .then((value) {
-                                //Todo: handle date to string
-                                if (value == null) return;
-                                log(value.toString());
-                                var tdate = value.toString().split(' ');
-                                toDatecontroller.text = tdate[0];
-                              });
-                            },
-                            onvalidate: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "date must not be empty";
-                              }
-                              return null;
-                            },
-                            text: "To date"),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Expanded(
+                          child: defaultTextFormField(
+                              readonly: true,
+                              controller: starttimeController,
+                              inputtype: TextInputType.number,
+                              prefixIcon:
+                                  const Icon(Icons.watch_later_outlined),
+                              ontap: () {
+                                showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now())
+                                    .then((value) {
+                                  // print(value!.format(context).toString());
+                                  starttimeController.text =
+                                      value!.format(context).toString();
+
+                                  //! 1970-01-01 time selected:00.000
+                                  // print(DateFormat("hh:mm a").parse(
+                                  //     starttimeController.text.toString()));
+                                });
+                              },
+                              onvalidate: (value) {
+                                if (value!.isEmpty) {
+                                  return "time must not be empty";
+                                }
+                                return null;
+                              },
+                              text: "From"),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: defaultTextFormField(
+                              readonly: true,
+                              controller: toDatecontroller,
+                              inputtype: TextInputType.datetime,
+                              prefixIcon: const Icon(Icons.date_range),
+                              ontap: () {
+                                showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime.parse('2010-01-01'),
+                                        lastDate: DateTime.parse('2030-01-01'))
+                                    .then((value) {
+                                  //Todo: handle date to string
+                                  if (value == null) return;
+                                  log(value.toString());
+                                  var tdate = value.toString().split(' ');
+                                  toDatecontroller.text = tdate[0];
+                                });
+                              },
+                              onvalidate: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "date must not be empty";
+                                }
+                                return null;
+                              },
+                              text: "To date"),
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Expanded(
+                          child: defaultTextFormField(
+                              readonly: true,
+                              controller: endtimeController,
+                              inputtype: TextInputType.number,
+                              prefixIcon:
+                                  const Icon(Icons.watch_later_outlined),
+                              ontap: () {
+                                showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now())
+                                    .then((value) {
+                                  // print(value!.format(context).toString());
+                                  endtimeController.text =
+                                      value!.format(context).toString();
+                                  // print(endtimeController.text);
+                                  //! 1970-01-01 time selected:00.000
+                                  // print(DateFormat("hh:mm a").parse(
+                                  //     endtimeController.text.toString()));
+                                });
+                              },
+                              onvalidate: (value) {
+                                if (value!.isEmpty) {
+                                  return "time must not be empty";
+                                }
+                                return null;
+                              },
+                              text: "To"),
+                        ),
                       ],
                     ),
                   ],

@@ -1,5 +1,5 @@
+import 'package:approvelt/common/conversion_date_time.dart';
 import 'package:approvelt/common/request_item.dart';
-import 'package:approvelt/constants/global_variable.dart';
 import 'package:approvelt/features/auth/providers/auth_provider.dart';
 import 'package:approvelt/features/home/provider/Admin_controller.dart';
 import 'package:approvelt/features/home/screens/qr_code_screen.dart';
@@ -7,22 +7,22 @@ import 'package:approvelt/models/request_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DisplayItemCard extends ConsumerWidget {
+class DisplayItemCard extends ConsumerStatefulWidget {
   static const String routeName = "home/item_card";
   const DisplayItemCard({super.key});
+  @override
+  ConsumerState<DisplayItemCard> createState() => _DisplayItemCard();
+}
 
-  void approveRequest(
-      RequestItemModel requestItemModel, WidgetRef ref, BuildContext context) {
-    ref
-        .read(adminStateProvider.notifier)
-        .approveRequest(requestItemModel, context);
+class _DisplayItemCard extends ConsumerState<DisplayItemCard> {
+  void approveRequest(WidgetRef ref, BuildContext context) {
+    ref.read(adminStateProvider.notifier).approveRequest(context);
+    setState(() {});
   }
 
-  void denyRequest(
-      RequestItemModel requestItemModel, WidgetRef ref, BuildContext context) {
-    ref
-        .read(adminStateProvider.notifier)
-        .denyRequest(requestItemModel, context);
+  void denyRequest(WidgetRef ref, BuildContext context) {
+    ref.read(adminStateProvider.notifier).denyRequest(context);
+    setState(() {});
   }
 
   void navigateToQR(BuildContext context, RequestItemModel requestItemModel) {
@@ -34,10 +34,10 @@ class DisplayItemCard extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    bool isAcceptClicked = true;
     final isLoading = ref.watch(adminStateProvider);
-    final RequestItemModel itemModel =
-        ModalRoute.of(context)!.settings.arguments as RequestItemModel;
+    final RequestItemModel itemModel = ref.watch(requestItemModelProvider)!;
     final DateTime endDateInDateTime = DateTime.parse(itemModel.endDate);
     final DateTime dateNowInDateTime =
         DateTime.parse(DateTime.now().toString().split(' ')[0]);
@@ -105,7 +105,7 @@ class DisplayItemCard extends ConsumerWidget {
                     Text(
                       itemModel.description,
                       style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.normal),
+                          fontSize: 17, fontWeight: FontWeight.normal),
                     ),
                     const SizedBox(
                       height: 10,
@@ -123,23 +123,26 @@ class DisplayItemCard extends ConsumerWidget {
                             children: [
                               const Text(
                                 "      Start date",
-                                style: TextStyle(color: Colors.grey),
+                                style: TextStyle(
+                                    color: Colors.black87, fontSize: 15),
                               ),
                               Row(
                                 children: [
                                   const Icon(Icons.date_range),
                                   Text(
-                                    itemModel.startDate,
-                                    style: const TextStyle(color: Colors.grey),
+                                    dateToDate(itemModel.startDate),
+                                    style: const TextStyle(
+                                        color: Colors.black87, fontSize: 15),
                                   ),
                                 ],
                               ),
-                              const Row(
+                              Row(
                                 children: [
-                                  Icon(Icons.lock_clock),
+                                  const Icon(Icons.lock_clock),
                                   Text(
-                                    "9 PM",
-                                    style: TextStyle(color: Colors.grey),
+                                    dateToTime(itemModel.startDate),
+                                    style: const TextStyle(
+                                        color: Colors.black87, fontSize: 15),
                                   ),
                                 ],
                               )
@@ -151,23 +154,26 @@ class DisplayItemCard extends ConsumerWidget {
                             children: [
                               const Text(
                                 "      End date",
-                                style: TextStyle(color: Colors.grey),
+                                style: TextStyle(
+                                    color: Colors.black87, fontSize: 15),
                               ),
                               Row(
                                 children: [
                                   const Icon(Icons.date_range),
                                   Text(
-                                    itemModel.endDate,
-                                    style: const TextStyle(color: Colors.grey),
+                                    dateToDate(itemModel.endDate),
+                                    style: const TextStyle(
+                                        color: Colors.black87, fontSize: 15),
                                   ),
                                 ],
                               ),
-                              const Row(
+                              Row(
                                 children: [
-                                  Icon(Icons.lock_clock),
+                                  const Icon(Icons.lock_clock),
                                   Text(
-                                    "9 PM",
-                                    style: TextStyle(color: Colors.grey),
+                                    dateToTime(itemModel.endDate),
+                                    style: const TextStyle(
+                                        color: Colors.black87, fontSize: 15),
                                   ),
                                 ],
                               )
@@ -227,37 +233,107 @@ class DisplayItemCard extends ConsumerWidget {
                           ),
                         )
                       ],
-                    )
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    if (ref.read(userModelProvider).type == "admin")
+                      Row(
+                        children: [
+                          Expanded(
+                              child: ElevatedButton.icon(
+                                  style: ButtonStyle(
+                                      iconColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Colors.white),
+                                      backgroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => !itemModel.isApproved
+                                                  ? Colors.grey.shade700
+                                                  : Colors.grey),
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                      ))),
+                                  onPressed: !itemModel.isApproved
+                                      ? () {
+                                          isAcceptClicked = true;
+                                          approveRequest(ref, context);
+                                        }
+                                      : null,
+                                  icon: const Icon(Icons.abc),
+                                  label: (isAcceptClicked && isLoading)
+                                      ? const CircularProgressIndicator()
+                                      : const Text(
+                                          "Accept",
+                                          style: TextStyle(color: Colors.white),
+                                        ))),
+                          const SizedBox(
+                            width: 7,
+                          ),
+                          Expanded(
+                              child: ElevatedButton.icon(
+                                  style: ButtonStyle(
+                                      iconColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Colors.white),
+                                      backgroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => !itemModel.isDenied
+                                                  ? Colors.grey.shade700
+                                                  : Colors.grey),
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                      ))),
+                                  onPressed: !itemModel.isDenied
+                                      ? () {
+                                          isAcceptClicked = false;
+                                          denyRequest(ref, context);
+                                        }
+                                      : null,
+                                  icon: const Icon(Icons.abc),
+                                  label: (!isAcceptClicked && isLoading)
+                                      ? const CircularProgressIndicator()
+                                      : const Text(
+                                          "Reject ",
+                                          style: TextStyle(color: Colors.white),
+                                        ))),
+                        ],
+                      ),
                   ],
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: TextButton.icon(
-                          style: ButtonStyle(
-                              iconColor: MaterialStateProperty.resolveWith(
-                                  (states) => Colors.white),
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith(
-                                      (states) => Colors.blue.shade900),
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ))),
-                          onPressed: () {},
-                          icon: const Icon(Icons.qr_code),
-                          label: const Text(
-                            "Show QR Code",
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    ),
-                  ]),
-            )
+            if (ref.read(userModelProvider).type == 'user')
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: TextButton.icon(
+                            style: ButtonStyle(
+                                iconColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.white),
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith(
+                                        (states) => Colors.blue.shade900),
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ))),
+                            onPressed: () => navigateToQR(context, itemModel),
+                            icon: const Icon(Icons.qr_code),
+                            label: const Text(
+                              "Show QR Code",
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      ),
+                    ]),
+              )
           ]),
         ),
       ),

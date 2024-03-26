@@ -50,7 +50,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             body: Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: BoxDecoration(gradient: orangeGradient),
+              decoration: BoxDecoration(gradient: blueGradient),
               alignment: Alignment.center,
               child: Container(
                 height: 400,
